@@ -16,7 +16,7 @@ ____________________
 
 loan broker system map:
 
-![https://imgur.com/lbRNJag.png](https://imgur.com/lbRNJag.png)
+![https://imgur.com/CegaFqu.png](https://imgur.com/CegaFqu.png)
 
 Links to repositories:
 
