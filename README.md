@@ -12,3 +12,25 @@ Dennis M. Rønnebæk
 Ebbe V. Nielsen
 
 Nicolai V. Bonderup
+____________________
+
+Links:
+
+[creditscore](https://github.com/tjaydk/LoanBroker-CreditScore)
+
+[rulesbase](https://github.com/Ebski/LoanBroker-BankRules)
+
+[recipientlist](https://github.com/NicolaiVBonderup/LoanBroker-RecipientList)
+
+[MQtranslator](https://github.com/NicolaiVBonderup/LoanBroker-MQTranslator)
+
+[MQBank](https://github.com/NicolaiVBonderup/LoanBroker-MQBank)
+
+[SOAPTranslator](https://github.com/NicolaiVBonderup/LoanBroker-SOAPTranslator)
+
+[SOAPBank](https://github.com/NicolaiVBonderup/LoanBroker-SOAPBank)
+
+[JSONTranslator](https://github.com/NicolaiVBonderup/LoanBroker-JSONTranslator)
+
+[XMLTranslator](https://github.com/NicolaiVBonderup/LoanBroker-XMLTranslator)
+
