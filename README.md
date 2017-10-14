@@ -14,7 +14,11 @@ Ebbe V. Nielsen
 Nicolai V. Bonderup
 ____________________
 
-Links:
+loan broker system map:
+
+![https://imgur.com/6TQAElr.png](https://imgur.com/6TQAElr.png)
+
+Links to repositories:
 
 [creditscore](https://github.com/tjaydk/LoanBroker-CreditScore)
 
