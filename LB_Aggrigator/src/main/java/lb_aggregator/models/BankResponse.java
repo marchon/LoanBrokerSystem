@@ -1,8 +1,8 @@
 
-package lb_aggregator;
+package lb_aggregator.models;
 
 
-class BankResponse {
+public class BankResponse {
     String ssn;
     double interest_rate;
     String bank;

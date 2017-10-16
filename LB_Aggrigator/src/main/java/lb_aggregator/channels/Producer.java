@@ -1,16 +1,17 @@
-package lb_aggregator;
+package lb_aggregator.channels;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.MessageProperties;
+import java.io.IOException;
 
 public class Producer {
 
     Channel channel;
     String answer;
 
-    Producer() {
+    public Producer() {
+        
         }
 
     public void publishResult(String ssn, double interest_rate, String Bank) {
@@ -18,12 +19,13 @@ public class Producer {
             ConnectionFactory factory = new ConnectionFactory();
             factory.setHost("localhost");
             Connection connection = factory.newConnection();
-            Channel channel = connection.createChannel();
-            channel.queueDeclare("g6_queue_result", false, false, false, null);
+            Channel chann = connection.createChannel();
+            chann.queueDeclare("g6_queue_result", false, false, false, null);
             String message = "{ \"ssn\": \"" + ssn + "\", \"interest_rate\" : " + interest_rate + " , \"bank\" : " + Bank + "\" }";
-            channel.basicPublish("", "g6_queue_result", null, message.getBytes());
+            chann.basicPublish("", "g6_queue_result", null, message.getBytes());
+            System.out.println(" [*] Sent message to user response channel");
             connection.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("ass");
         }
     }

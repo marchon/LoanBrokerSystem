@@ -1,5 +1,5 @@
 
-package lb_aggregator;
+package lb_aggregator.models;
 
 import java.util.ArrayList;
 

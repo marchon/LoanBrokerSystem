@@ -5,39 +5,31 @@
  */
 package lb_aggregator;
 
+import lb_aggregator.threads.Initializer;
 import java.io.IOException;
 
-import com.rabbitmq.client.AMQP.BasicProperties;
-import com.rabbitmq.client.AMQP.BasicProperties.Builder;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.ConsumerCancelledException;
-import com.rabbitmq.client.QueueingConsumer;
-import com.rabbitmq.client.ShutdownSignalException;
-import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import lb_aggregator.channels.Consumer;
+import lb_aggregator.channels.Producer;
+import lb_aggregator.threads.CountDownHandler;
 
 public class Aggregator {
 
     public static void main(String[] args) throws IOException, Exception {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
-        Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel();
 
         ExecutorService threadExecutor = Executors.newCachedThreadPool();
         
-        Initializer ini = new Initializer(); // threadExecutor skal med i ini.
-        Dictionary dictionary = new Dictionary();
-
-       
-
+        Producer p = new Producer();
+        CountDownHandler cdh = new CountDownHandler();
         
-        connection.close();
-
+        threadExecutor.execute(new Initializer(threadExecutor, p, cdh));
         
+        Consumer consumer = new Consumer(p, cdh);
 
+        consumer.consume();
     }
 }
