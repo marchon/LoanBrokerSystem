@@ -19,7 +19,7 @@ public class Consumer {
         this.p = p;
         this.cdh = cdh;
     }
-    
+
     Producer p;
     CountDownHandler cdh;
     Gson gson = new Gson();
@@ -30,7 +30,7 @@ public class Consumer {
             factory.setHost("localhost");
             Connection connection = factory.newConnection();
             Channel channel = connection.createChannel();
-            
+
             channel.queueDeclare("g6_queue_aggregator", false, false, false, null);
             QueueingConsumer consumer = new QueueingConsumer(channel);
             channel.basicConsume("g6_queue_aggregator", true, consumer);
@@ -40,8 +40,9 @@ public class Consumer {
                 QueueingConsumer.Delivery delivery = consumer.nextDelivery();
                 String message = new String(delivery.getBody());
                 BankResponse bankResponse = gson.fromJson(message, BankResponse.class);
-                Dictionary.dictionary.get(bankResponse.getSsn()).getA().add(bankResponse);
+                System.out.println("Got response from " + bankResponse.getBank() + " for the SSN " + bankResponse.getSsn());
                 if (Dictionary.dictionary.containsKey(bankResponse.getSsn())) {
+                    Dictionary.dictionary.get(bankResponse.getSsn()).getA().add(bankResponse);
                     if (Dictionary.checkResultAmount(bankResponse.getSsn())) {
                         BankResponse me = Dictionary.checkBestResult(bankResponse.getSsn());
                         p.publishResult(me.getSsn(), me.getInterest_rate(), me.getBank());
