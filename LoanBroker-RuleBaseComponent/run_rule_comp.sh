@@ -1,1 +1,0 @@
-py -u rule_base_component.py
