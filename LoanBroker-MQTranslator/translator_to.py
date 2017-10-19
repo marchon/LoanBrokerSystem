@@ -26,7 +26,7 @@ def callback(ch, method, properties, body):
         json_str = json_str['body']
         csv_str = json_str['ssn'] + "," + str(json_str['loan']) + "," + str(json_str['date']) + "," + str(json_str['credit'])
         send_to_bank(csv_str)
-    except (KeyError):
+    except (KeyError|json.decoder.JSONDecodeError):
         send_error("Key missing, please check JSON data.", json_str)
     
 def send_to_bank(body):
@@ -39,7 +39,8 @@ def send_to_bank(body):
     
     bank_channel.basic_publish(exchange='g6_bank_rabbit',
                                routing_key='',
-                               body=body)
+                               body=body,
+                               properties=pika.BasicProperties(reply_to='g6_queue_rabbit_response'))
                
     bank_connection.close()
     

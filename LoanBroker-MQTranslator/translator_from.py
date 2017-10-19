@@ -7,14 +7,7 @@ import xml.etree.ElementTree as ET
 connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
 channel = connection.channel()
 
-channel.exchange_declare(exchange='g6_exchange_rabbit_response',
-                                  exchange_type='fanout')
-
-result = channel.queue_declare(exclusive=True)
-queue_name = result.method.queue
-
-channel.queue_bind(exchange='g6_exchange_rabbit_response',
-                   queue=queue_name)
+channel.queue_declare('g6_queue_rabbit_response')
 
 # When a message is received, callback is called.
 # We can override to specify its behavior.
@@ -28,7 +21,9 @@ def callback(ch, method, properties, body):
         del json_str['interest']
         send_to_normalizer(json_str)
     except (KeyError):
-        send_error("Key missing, please check JSON data.", json_str)
+        print("Key missing, please check JSON data.")
+        print(str)
+        send_error("Key missing, please check JSON data.", str)
     
 def send_to_normalizer(body):
 
@@ -60,8 +55,8 @@ def send_error(error, body):
                           routing_key='g6_queue_dead_letter',
                           body=json.dumps(json_str))
     
-channel.basic_consume(callback, queue=queue_name, no_ack=True)
+channel.basic_consume(callback, queue='g6_queue_rabbit_response', no_ack=True)
 
-print(" [*] Listening on queue 'g6_exchange_rabbit_response'.")
+print(" [*] Listening on queue 'g6_queue_rabbit_response'.")
 print(' [*] Waiting for messages. To exit press CTRL+C')
 channel.start_consuming()
