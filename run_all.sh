@@ -1,1 +1,13 @@
-py -u translator_from.py
+cd Runners
+start run_rule_comp.sh
+start run_rec_list.sh
+start run_soap_bank.sh
+start run_rabbit_bank.sh
+start run_soap_translator_to.sh
+start run_soap_translator_from.sh
+start run_xml_translator_to.sh
+start run_xml_translator_from.sh
+start run_json_translator_to.sh
+start run_json_translator_from.sh
+start run_rabbit_translator_to.sh
+start run_rabbit_translator_from.sh
