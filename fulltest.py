@@ -13,7 +13,7 @@ class IntegrationTests(unittest.TestCase):
     channel = connection.channel()
 
     # Creating a queue.
-    channel.queue_declare(queue='g6_queue_rulebase')
+    channel.queue_declare(queue='g6_queue_credit', durable=True)
     
     conc_responses = {}
 
@@ -28,8 +28,8 @@ class IntegrationTests(unittest.TestCase):
         
         
         channel.basic_publish(exchange='',
-                          routing_key='g6_queue_rulebase',
-                          body='{"ssn": "55555555", "credit": 700, "loan": 50000, "date": 360}')
+                          routing_key='g6_queue_credit',
+                          body='{"ssn": "111111-1234", "amount": 50000.0, "days": 360}')
         
         channel.start_consuming()
         
@@ -42,18 +42,18 @@ class IntegrationTests(unittest.TestCase):
         channel.basic_consume(self.callback_concurrent, queue='g6_queue_result', no_ack=True)
     
         channel.basic_publish(exchange='',
-                          routing_key='g6_queue_rulebase',
-                          body='{"ssn": "55555555", "credit": 700, "loan": 50000, "date": 360}')
+                          routing_key='g6_queue_credit',
+                          body='{"ssn": "111111-2345", "amount": 50000.0, "days": 360}')
                           
                           
         channel.basic_publish(exchange='',
-                          routing_key='g6_queue_rulebase',
-                          body='{"ssn": "66666666", "credit": 200, "loan": 25000, "date": 150}')
+                          routing_key='g6_queue_credit',
+                          body='{"ssn": "111111-3456", "amount": 25000.0, "days": 150}')
                           
                           
         channel.basic_publish(exchange='',
-                          routing_key='g6_queue_rulebase',
-                          body='{"ssn": "77777777", "credit": 700, "loan": 800000, "date": 50}')
+                          routing_key='g6_queue_credit',
+                          body='{"ssn": "111111-4567", "amount": 800000.0, "days": 50}')
                           
         channel.start_consuming()
             

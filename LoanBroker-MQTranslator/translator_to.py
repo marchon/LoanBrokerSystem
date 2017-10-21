@@ -24,7 +24,7 @@ def callback(ch, method, properties, body):
     try:
         json_str = json.loads(string)
         json_str = json_str['body']
-        csv_str = json_str['ssn'] + "," + str(json_str['loan']) + "," + str(json_str['date']) + "," + str(json_str['credit'])
+        csv_str = json_str['ssn'].replace('-','') + "," + str(json_str['loan']) + "," + str(json_str['date']) + "," + str(json_str['credit'])
         send_to_bank(csv_str)
     except (KeyError|json.decoder.JSONDecodeError):
         send_error("Key missing, please check JSON data.", json_str)

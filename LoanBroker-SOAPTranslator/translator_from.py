@@ -26,7 +26,7 @@ def callback(ch, method, properties, body):
 def XML_translate(body):
     xml = ET.fromstring(body)
     json_str = {}
-    json_str['ssn'] = xml.find('ssn').text
+    json_str['ssn'] = xml.find('ssn').text.replace('-','')
     json_str['interest_rate'] = xml.find('interest').text
     json_str['bank'] = 'SOAP Bank'
     return json_str

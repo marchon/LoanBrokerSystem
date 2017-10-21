@@ -43,6 +43,7 @@ public class Consumer {
                 System.out.println("Got response from " + bankResponse.getBank() + " for the SSN " + bankResponse.getSsn());
                 if (Dictionary.dictionary.containsKey(bankResponse.getSsn())) {
                     Dictionary.dictionary.get(bankResponse.getSsn()).getA().add(bankResponse);
+                    System.out.println(bankResponse.getSsn() + " has amount: " + Dictionary.checkResultAmount(bankResponse.getSsn()));
                     if (Dictionary.checkResultAmount(bankResponse.getSsn())) {
                         BankResponse me = Dictionary.checkBestResult(bankResponse.getSsn());
                         p.publishResult(me.getSsn(), me.getInterest_rate(), me.getBank());

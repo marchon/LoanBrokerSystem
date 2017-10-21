@@ -6,7 +6,12 @@ import requests
 connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
 channel = connection.channel()
 
-channel.queue_declare(queue='g6_queue_rulebase')
+#channel.queue_declare(queue='g6_queue_rulebase', durable=True)
+
+channel.exchange_declare(exchange='g6_queue_rulebase',exchange_type='direct',durable=True)
+
+result = channel.queue_declare(exclusive=True)
+queue_name = result.method.queue
 
 
 # When a message is received, callback is called.
@@ -18,14 +23,21 @@ def callback(ch, method, properties, body):
         json_str = json.loads(str)
         get_bank_list(json_str)
     except (KeyError):
+        print (json_str)
         send_error("Key missing, please check JSON data.", json_str)
     
 def get_bank_list(json_str):
 
-    r = requests.get('http://localhost:51785/api/bankrules/' + str(json_str['credit']) + '/' + str(json_str['loan']))
+    r = requests.get('http://localhost:51785/api/bankrules/' + str(json_str['creditScore']) + '/' + str(json_str['loanAmount']))
     
     full_json = {}
-    full_json['body'] = json_str
+    json_body = {}
+    json_body['credit'] = json_str['creditScore']
+    json_body['loan'] = float(json_str['loanAmount'])
+    json_body['ssn'] = json_str['ssn']
+    json_body['date'] = json_str['days']
+    
+    full_json['body'] = json_body
     full_json['bool_list'] = r.text
     
     forward_to_recipient_list(full_json)

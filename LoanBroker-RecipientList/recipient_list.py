@@ -43,7 +43,7 @@ def find_recipients(body, bool_list):
 def notify_aggregator(ssn, bank_amount):
     
     json_str = {}
-    json_str['ssn'] = ssn
+    json_str['ssn'] = ssn.replace('-','')
     json_str['bankAmount'] = bank_amount
     
     aggr_connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))

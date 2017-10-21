@@ -19,7 +19,7 @@ public class CountDown implements Runnable {
     @Override
     public void run() {
         try {
-            Thread.sleep(30000);
+            Thread.sleep(20000);
             
             
             BankResponse me = Dictionary.checkBestResult(ssn);

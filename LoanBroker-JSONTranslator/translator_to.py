@@ -30,8 +30,10 @@ def callback(ch, method, properties, body):
     
 def construct_json(body):
     
+    # JSON bank does not accept ints large enough for full SSN, have to cut it off.
     formatted_json = {}
-    formatted_json["ssn"] = int(body['ssn'])
+    formatted_json['ssn'] = body['ssn'].replace('-','')
+    #formatted_json["ssn"] = int(body['ssn'][:9].replace('-',''))
     formatted_json["creditScore"] = body['credit']
     formatted_json["loanAmount"] = body['loan']
     formatted_json["loanDuration"] = body['date']

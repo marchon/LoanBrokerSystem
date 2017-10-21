@@ -41,7 +41,7 @@ def generate_xml(json_str):
     datetime_str = datetime_str.format().split("+",1)[0] + ".0 CET"
         
     xml_doc = doc(
-                ssn_field(str(json_str['ssn'])),
+                ssn_field(str(json_str['ssn'].replace('-',''))),
                 credit_field(str(json_str['credit'])),
                 loan_field(str(json_str['loan'])),
                 date_field(datetime_str.format())
@@ -58,7 +58,6 @@ def generate_datetime_string(date):
 def send_to_bank(body):
     bank_connection = pika.BlockingConnection(pika.URLParameters('amqp://student:cph@datdb.cphbusiness.dk:5672/%2F'))
     bank_channel = bank_connection.channel()
-    
     
     bank_channel.basic_publish(exchange='cphbusiness.bankXML',
                       routing_key='',
