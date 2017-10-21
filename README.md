@@ -16,25 +16,27 @@ ____________________
 
 loan broker system map:
 
-![https://imgur.com/CegaFqu.png](https://imgur.com/CegaFqu.png)
+![https://imgur.com/G8dG58i.png](https://imgur.com/G8dG58i.png)
 
 Links to repositories:
 
-[creditscore](https://github.com/tjaydk/LoanBroker-CreditScore)
+[credit score](https://github.com/tjaydk/LoanBroker-CreditScore)
 
 [rulesbase](https://github.com/Ebski/LoanBroker-BankRules)
 
-[recipientlist](https://github.com/NicolaiVBonderup/LoanBroker-RecipientList)
+[recipient list](https://github.com/NicolaiVBonderup/LoanBroker-RecipientList)
 
-[MQtranslator](https://github.com/NicolaiVBonderup/LoanBroker-MQTranslator)
+[MQ translator](https://github.com/NicolaiVBonderup/LoanBroker-MQTranslator)
 
-[MQBank](https://github.com/NicolaiVBonderup/LoanBroker-MQBank)
+[MQ Bank](https://github.com/NicolaiVBonderup/LoanBroker-MQBank)
 
-[SOAPTranslator](https://github.com/NicolaiVBonderup/LoanBroker-SOAPTranslator)
+[SOAP Translator](https://github.com/NicolaiVBonderup/LoanBroker-SOAPTranslator)
 
-[SOAPBank](https://github.com/NicolaiVBonderup/LoanBroker-SOAPBank)
+[SOAP Bank](https://github.com/NicolaiVBonderup/LoanBroker-SOAPBank)
 
-[JSONTranslator](https://github.com/NicolaiVBonderup/LoanBroker-JSONTranslator)
+[JSON Translator](https://github.com/NicolaiVBonderup/LoanBroker-JSONTranslator)
 
-[XMLTranslator](https://github.com/NicolaiVBonderup/LoanBroker-XMLTranslator)
+[XML Translator](https://github.com/NicolaiVBonderup/LoanBroker-XMLTranslator)
+
+[Aggregator](https://github.com/ruvazi/LoanBrokerSystem/tree/master/LB_Aggrigator)
 
