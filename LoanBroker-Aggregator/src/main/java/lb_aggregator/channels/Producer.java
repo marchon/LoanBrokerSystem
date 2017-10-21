@@ -21,7 +21,7 @@ public class Producer {
             Connection connection = factory.newConnection();
             Channel chann = connection.createChannel();
             chann.queueDeclare("g6_queue_result", false, false, false, null);
-            String message = "{ \"ssn\": \"" + ssn + "\", \"interest_rate\" : " + interest_rate + " , \"bank\" : " + Bank + "\" }";
+            String message = "{ \"ssn\": \"" + ssn + "\", \"interest_rate\" : " + interest_rate + " , \"bank\" : \"" + Bank + "\" }";
             chann.basicPublish("", "g6_queue_result", null, message.getBytes());
             System.out.println(" [*] Sent message to user response channel");
             connection.close();
