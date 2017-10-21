@@ -1,4 +1,5 @@
 cd Runners
+start run_user_interface.sh
 start run_rule_comp.sh
 start run_rec_list.sh
 start run_soap_bank.sh
