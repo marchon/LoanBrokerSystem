@@ -65,7 +65,6 @@ def forward_to_bank(body,exchange):
     bank_connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
     bank_channel = bank_connection.channel()
     
-    #bank_channel.queue_declare(queue)
     bank_channel.exchange_declare(exchange=exchange,
                                   exchange_type='fanout')
     

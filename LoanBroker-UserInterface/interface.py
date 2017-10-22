@@ -17,7 +17,7 @@ def run():
     
         if (check_integrity(input_ssn,input_loan,input_date)):
             send_to_credit_bureau(input_ssn,input_loan,input_date)
-            wait_for_result()
+            wait_for_result(input_ssn)
     
     
     
@@ -57,15 +57,17 @@ def send_to_credit_bureau(ssn,loan,date):
                                  body=json.dumps(json_str))
                                  
     
-def wait_for_result():
+def wait_for_result(ssn):
     
     print ('Please hold.')
     
     connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
     channel = connection.channel()
 
-    channel.queue_declare(queue='g6_queue_result')
-    channel.basic_consume(callback, queue='g6_queue_result', no_ack=True)
+    queue = 'g6_queue_result_' + ssn.replace('-','')
+    
+    channel.queue_declare(queue=queue)
+    channel.basic_consume(callback, queue=queue, no_ack=True)
         
         
     channel.start_consuming()
@@ -80,6 +82,8 @@ def callback(ch, method, properties, body):
     print ('\t\t')
     
     ch.stop_consuming()
+    ch.close()
+    
     
     run()
     
