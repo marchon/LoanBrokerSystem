@@ -6,8 +6,6 @@ import requests
 connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
 channel = connection.channel()
 
-#channel.queue_declare(queue='g6_queue_rulebase', durable=True)
-
 channel.exchange_declare(exchange='g6_queue_rulebase',exchange_type='direct',durable=True)
 
 result = channel.queue_declare(exclusive=True)
@@ -23,7 +21,7 @@ def callback(ch, method, properties, body):
         json_str = json.loads(str)
         get_bank_list(json_str)
     except (KeyError):
-        print (json_str)
+        # Publishing the rejected data to a dead letter queue.
         send_error("Key missing, please check JSON data.", json_str)
     
 def get_bank_list(json_str):
@@ -59,14 +57,12 @@ def forward_to_recipient_list(body):
                           
 def send_error(error, body):
 
-    # Creating a queue.
     channel.queue_declare(queue='g6_queue_dead_letter')
 
     json_str = {}
     json_str['error'] = error
     json_str['body'] = body
     
-    # Setting up an exchange.
     channel.basic_publish(exchange='',
                           routing_key='g6_queue_dead_letter',
                           body=json.dumps(json_str))

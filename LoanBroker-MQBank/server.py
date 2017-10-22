@@ -19,7 +19,7 @@ channel.queue_bind(exchange='g6_bank_rabbit',
 # When a message is received, callback is called.
 # We can override to specify its behavior.
 def callback(ch, method, properties, body):
-    # SSN,Loan,Date,Credit
+    # Getting CSV data.
     str = bytes.decode(body)
     loan_tuple = str.split(",")
     reply_to = properties.reply_to
@@ -27,6 +27,7 @@ def callback(ch, method, properties, body):
     if validate_loan(loan_tuple):
         send_response(loan_tuple[0],reply_to)
     else:
+        # Publishing the rejected data to a dead letter queue.
         send_error(str)
     
 def validate_loan(tuple):
@@ -40,6 +41,7 @@ def validate_loan(tuple):
     if None in [tuple[0],tuple[1],tuple[2],tuple[3]]:
         return False
     
+    # Making sure the credit score matches the bank's standards.
     if int(tuple[3]) >= 400:
         return True
     else:
@@ -64,14 +66,12 @@ def send_response(ssn,reply_to):
                           
 def send_error(body):
     
-    # Creating a queue.
     channel.queue_declare(queue='g6_queue_dead_letter')
 
     json_str = {}
     json_str['error'] = "Error occurred. This loan is either poorly formatted, or does not meet this bank's criteria."
     json_str['body'] = body
     
-    # Setting up an exchange.
     channel.basic_publish(exchange='',
                           routing_key='g6_queue_dead_letter',
                           body=json.dumps(json_str))

@@ -26,14 +26,13 @@ def callback(ch, method, properties, body):
         form_json = construct_json(json_str['body'])
         send_to_bank(form_json)
     except (KeyError):
+        # Publishing the rejected data to a dead letter queue.
         send_error("Key missing, please check JSON data.", json_str)
     
 def construct_json(body):
     
-    # JSON bank does not accept ints large enough for full SSN, have to cut it off.
     formatted_json = {}
     formatted_json['ssn'] = body['ssn'].replace('-','')
-    #formatted_json["ssn"] = int(body['ssn'][:9].replace('-',''))
     formatted_json["creditScore"] = body['credit']
     formatted_json["loanAmount"] = body['loan']
     formatted_json["loanDuration"] = body['date']
@@ -58,14 +57,12 @@ def send_to_bank(body):
     
 def send_error(error, body):
 
-    # Creating a queue.
     channel.queue_declare(queue='g6_queue_dead_letter')
 
     json_str = {}
     json_str['error'] = error
     json_str['body'] = body
     
-    # Setting up an exchange.
     channel.basic_publish(exchange='',
                           routing_key='g6_queue_dead_letter',
                           body=json.dumps(json_str))

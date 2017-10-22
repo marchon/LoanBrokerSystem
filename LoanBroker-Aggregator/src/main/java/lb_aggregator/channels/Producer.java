@@ -22,11 +22,14 @@ public class Producer {
             Connection connection = factory.newConnection();
             Channel chann = connection.createChannel();
             
+            // We set up a specific channel for the SSN, that the user interface consumes from.
+            // Not a perfect solution, but we're doing what we can with what we're given.
+            // Some kind of UID from the user interface would have been preferable, but not doable due to the remote banks.
             String queue = "g6_queue_result_" + ssn;
-            //chann.queueDeclare("g6_queue_result", false, false, false, null);
+            
             chann.queueDeclare(queue, false, false, false, null);
             String message = "{ \"ssn\": \"" + ssn + "\", \"interest_rate\" : " + interest_rate + " , \"bank\" : \"" + Bank + "\" }";
-            //chann.basicPublish("", "g6_queue_result", null, message.getBytes());
+            
             chann.basicPublish("", queue, null, message.getBytes());
             System.out.println(" [*] Sent message to user response channel");
             connection.close();

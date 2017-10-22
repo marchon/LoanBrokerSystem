@@ -19,6 +19,8 @@ public class CountDown implements Runnable {
     @Override
     public void run() {
         try {
+            // Wait for 30 seconds. If all bank quotes have not been retrieved by that time,
+            // just return the best quote out of the ones we have so far.
             Thread.sleep(20000);
             
             

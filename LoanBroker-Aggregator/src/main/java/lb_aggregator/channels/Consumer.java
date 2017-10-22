@@ -26,6 +26,7 @@ public class Consumer {
 
     public void consume() {
         try {
+            // Setting up the channel that the normalizer publishes loan quotes to.
             ConnectionFactory factory = new ConnectionFactory();
             factory.setHost("localhost");
             Connection connection = factory.newConnection();
@@ -37,11 +38,15 @@ public class Consumer {
 
             System.out.println("Consumer running");
             while (true) {
+                // When receiving a loan quote from the normalizer, we cast it to an object.
+                // We then add it to the dict by using the SSN provided.
                 QueueingConsumer.Delivery delivery = consumer.nextDelivery();
                 String message = new String(delivery.getBody());
                 BankResponse bankResponse = gson.fromJson(message, BankResponse.class);
                 System.out.println("Got response from " + bankResponse.getBank() + " for the SSN " + bankResponse.getSsn());
                 if (Dictionary.dictionary.containsKey(bankResponse.getSsn())) {
+                    // If we have retrieved all loan quotes required for a specific SSN,
+                    // we halt the countdown, and return the result to the user immediately.
                     Dictionary.dictionary.get(bankResponse.getSsn()).getA().add(bankResponse);
                     System.out.println(bankResponse.getSsn() + " has amount: " + Dictionary.checkResultAmount(bankResponse.getSsn()));
                     if (Dictionary.checkResultAmount(bankResponse.getSsn())) {

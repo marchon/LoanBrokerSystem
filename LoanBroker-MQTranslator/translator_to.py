@@ -27,6 +27,7 @@ def callback(ch, method, properties, body):
         csv_str = json_str['ssn'].replace('-','') + "," + str(json_str['loan']) + "," + str(json_str['date']) + "," + str(json_str['credit'])
         send_to_bank(csv_str)
     except (KeyError|json.decoder.JSONDecodeError):
+        # Publishing the rejected data to a dead letter queue.
         send_error("Key missing, please check JSON data.", json_str)
     
 def send_to_bank(body):
@@ -47,14 +48,12 @@ def send_to_bank(body):
 
 def send_error(error, body):
 
-    # Creating a queue.
     channel.queue_declare(queue='g6_queue_dead_letter')
 
     json_str = {}
     json_str['error'] = error
     json_str['body'] = body
     
-    # Setting up an exchange.
     channel.basic_publish(exchange='',
                           routing_key='g6_queue_dead_letter',
                           body=json.dumps(json_str))

@@ -25,10 +25,12 @@ def callback(ch, method, properties, body):
     try:
         find_recipients(json_str, json_str['bool_list'])
     except (KeyError):
+        # Publishing the rejected data to a dead letter queue.
         send_error("Key missing, please check JSON data.", json_str)
     
 def find_recipients(body, bool_list):
 
+    # Running through the boolean list, and matching it to the dict with bank exchanges.
     bool_list = json.loads(bool_list)
     list = numpy.array([bool_list['Bank1'],bool_list['Bank2'],bool_list['Bank3'],bool_list['Bank4']])
     del body['bool_list']
@@ -79,14 +81,12 @@ def forward_to_bank(body,exchange):
     
 def send_error(error, body):
 
-    # Creating a queue.
     channel.queue_declare(queue='g6_queue_dead_letter')
 
     json_str = {}
     json_str['error'] = error
     json_str['body'] = body
     
-    # Setting up an exchange.
     channel.basic_publish(exchange='',
                           routing_key='g6_queue_dead_letter',
                           body=json.dumps(json_str))

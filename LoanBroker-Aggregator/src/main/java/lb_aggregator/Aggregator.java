@@ -18,6 +18,7 @@ import lb_aggregator.threads.CountDownHandler;
 public class Aggregator {
 
     public static void main(String[] args) throws IOException, Exception {
+        
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
 
@@ -26,8 +27,10 @@ public class Aggregator {
         Producer p = new Producer();
         CountDownHandler cdh = new CountDownHandler();
         
+        // Starting up the Initializer in its own thread, letting it consumes notifications from the recipient list.
         threadExecutor.execute(new Initializer(threadExecutor, p, cdh));
         
+        // Starting up the Consumer, which consumes responses from the normalizer.
         Consumer consumer = new Consumer(p, cdh);
 
         consumer.consume();

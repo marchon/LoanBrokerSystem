@@ -19,6 +19,7 @@ def callback(ch, method, properties, body):
     try:
         json_str = XML_translate(body)
     except (KeyError):
+        # Publishing the rejected data to a dead letter queue.
         send_error("Key missing, please check JSON data.", json_str)
         
     send_to_aggregator(json_str)
@@ -46,14 +47,12 @@ def send_to_aggregator(body):
     
 def send_error(error, body):
 
-    # Creating a queue.
     channel.queue_declare(queue='g6_queue_dead_letter')
 
     json_str = {}
     json_str['error'] = error
     json_str['body'] = body
     
-    # Setting up an exchange.
     channel.basic_publish(exchange='',
                           routing_key='g6_queue_dead_letter',
                           body=json.dumps(json_str))

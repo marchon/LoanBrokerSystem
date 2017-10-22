@@ -43,12 +43,16 @@ public class Initializer implements Runnable {
 
             System.out.println("Initializer running");
             while (true) {
+                // When we get a notification from the recipient list, we set an entry in the dict.
+                // It contains the SSN, and the amount of banks we're expecting quotes from.
+                // The consumer uses this to determine where to store the responses, and when to return a quote prematurely.
                 QueueingConsumer.Delivery delivery = consumer.nextDelivery();
                 String message = new String(delivery.getBody());
                 InitObject iob = gson.fromJson(message, InitObject.class);
+                
                 Dictionary.dictionary.put(iob.getSsn(), new BankResult(iob.getBankAmount(), new ArrayList<BankResponse>()));
                 System.out.println("Starting new countdown thread");
-                //threadExecutor.execute(new CountDown(iob.getSsn(), p));
+                
                 Future f = threadExecutor.submit(new CountDown(iob.getSsn(), p));
                 cdh.addThread(iob.getSsn(), f);
             }

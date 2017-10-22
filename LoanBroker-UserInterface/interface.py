@@ -25,6 +25,7 @@ def check_integrity(ssn,loan,date):
     
     ssn = ssn.replace('-','')
     
+    # Making sure the inputs can be cast correctly, and checking their ranges.
     try:
         int(ssn)
         float(loan)
@@ -64,6 +65,8 @@ def wait_for_result(ssn):
     connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
     channel = connection.channel()
 
+    # Creating a specific queue for this SSN, to make sure there's no conflicts if there are several messsages in the queue.
+    # Would have been nice to have a UID, but not possible with the two remote banks.
     queue = 'g6_queue_result_' + ssn.replace('-','')
     
     channel.queue_declare(queue=queue)
